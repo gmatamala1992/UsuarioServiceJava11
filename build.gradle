@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.18'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.graalvm.buildtools.native' version '0.9.11'
+    id 'jacoco'
+}
+
+group = 'com.usuario'
+version = '0.0.1-SNAPSHOT'
+description = 'UsuarioService'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // 1. Web y Validación (Cambiado a starter-web que es el estándar)
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // Nota: Eliminamos hibernate-validator 8.0.1 porque es para Java 17/Jakarta.
+    // El starter-validation de Spring Boot 2.7 ya trae la versión correcta.
+
+    // 2. Seguridad
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // 3. Base de Datos
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'com.h2database:h2'
+
+    // 4. JSON Web Token (JJWT) - Versión 0.11.5 es compatible con Java 11
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // 5. Herramientas y Lombok
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // 6. Testing (Corregido: starter-test ya incluye todo lo necesario)
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
